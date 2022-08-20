@@ -1,13 +1,7 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import express, { Express, Request, Response } from "express";
 
 import path from "path";
 import dotenv from "dotenv";
-
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
-
-dotenv.config({
-  path: path.resolve(__dirname, "..", "..", ".env." + process.env.NODE_ENV),
-});
 
 import bodyParser from "body-parser";
 import Youch from "youch";
@@ -15,10 +9,16 @@ import helmet from "helmet";
 import InvalidRoutes from "./routes/invalid.routes";
 import Routes from "./routes";
 
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+
+dotenv.config({
+  path: path.resolve(__dirname, "..", "..", `.env.${process.env.NODE_ENV}`),
+});
+
 export default class Server {
   public express: Express;
 
-  constructor() {
+  public constructor() {
     this.express = express();
 
     this.middlewares();
@@ -44,7 +44,7 @@ export default class Server {
   }
 
   private exception(): void {
-    this.express.use(async (err: Error, req: Request, res: Response, next: NextFunction) => {
+    this.express.use(async (err: Error, req: Request, res: Response) => {
       let message: any = "Internal Server Error";
 
       if (process.env.NODE_ENV !== "production") {
@@ -56,8 +56,9 @@ export default class Server {
     });
   }
 
-  createHTTPServer(): void {
+  private createHTTPServer(): void {
     this.express.listen(process.env.PORT);
+    // eslint-disable-next-line no-console
     console.log(`🚀 Server running at port ${process.env.PORT} 🚀`);
   }
 }

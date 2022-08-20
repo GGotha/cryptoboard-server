@@ -1,10 +1,9 @@
-import UserController from "../controllers/UserController";
 import express from "express";
-import handler from "express-async-handler";
+import { UserController } from "../controllers";
 
 const userRouter = express.Router();
 
-userRouter.post("/session", handler(UserController.session));
-userRouter.post("/", handler(UserController.store));
+userRouter.post("/session", UserController.session);
+userRouter.post("/", UserController.store);
 
 export default userRouter;

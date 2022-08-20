@@ -27,6 +27,8 @@
     "implicit-arrow-linebreak": "off",
     "import/prefer-default-export": "off",
     "no-param-reassign": "off",
+    "object-curly-newline": "off",
+    "function-paren-newline": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
