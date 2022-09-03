@@ -1,0 +1,11 @@
+- Autenticação (x)
+- Cadastro (x)
+- Sessão Criptomoedas (x)
+  - Moedas mais famosas (x)
+- Sessão Earning
+  - M2E
+  - P2E
+- Sessão NFT
+  - Coleções mais famosas
+  - Valores de cada NFT
+- Sessão Moedas Favoritas (caso dê tempo)

@@ -11,7 +11,7 @@ yarn dev
 
 ## Endpoints
 
-### localhost:3333/user/session
+### POST - localhost:3333/user/session
 
 - Autenticar
 
@@ -22,7 +22,7 @@ yarn dev
 }
 ```
 
-### localhost:3333/user/
+### POST - localhost:3333/user/
 
 - Criar usuário
 
@@ -34,3 +34,11 @@ yarn dev
 	"password": "123mudar"
 }
 ```
+
+### GET - localhost:3333/coin/all
+
+- Lista todas as criptomoedas
+
+### GET - localhost:3333/coin/bitcoin
+
+- Lista os dados da moeda Bitcoin
