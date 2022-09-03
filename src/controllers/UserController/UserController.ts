@@ -34,11 +34,48 @@ export class UserController {
 
       return res.status(500).send({
         success: false,
-        message: "There was an error to authenticate",
+        message: "Houve ume erro interno",
       });
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public static async store() {}
+  public static async store(req: Request, res: Response) {
+    let { password } = req.body;
+    const { email, first_name, last_name } = req.body;
+
+    try {
+      const userAlreadyExists = await prisma.user.findFirst({ where: { email } });
+
+      if (userAlreadyExists) {
+        throw new CustomError({ message: "Esse usuário já existe", statusCode: 400 });
+      }
+
+      password = await bcrypt.hash(password, 8);
+
+      const role = await prisma.role.findFirst({ where: { name: "User", active: true } });
+      const user = await prisma.user.create({
+        data: { email, password, first_name, last_name, id_role: role.id },
+      });
+
+      delete user.password;
+
+      return res.send({
+        success: true,
+        user,
+        token: Authentication.generateToken({ userId: user.id }),
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).send({
+          success: false,
+          message: error.message,
+        });
+      }
+
+      return res.status(500).send({
+        success: false,
+        message: "Houve um erro interno",
+      });
+    }
+  }
 }

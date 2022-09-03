@@ -21,6 +21,7 @@
   },
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
+    "camelcase": "off",
     "operator-linebreak": "off",
     "@typescript-eslint/explicit-member-accessibility": "warn",
     "class-methods-use-this": "off",
