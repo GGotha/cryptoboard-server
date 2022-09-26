@@ -54,6 +54,33 @@ async function main() {
       password: "$2b$08$7l609TK80Phx8Jg3ReWV7eZDPuHc.36JQvdE3bMC4IoSxBLliY3Zi",
     },
   });
+
+  await prisma.taskPriority.upsert({
+    where: { id: "1" },
+    update: {},
+    create: {
+      name: "Alta",
+      created_at: new Date(),
+    },
+  });
+
+  await prisma.taskPriority.upsert({
+    where: { id: "2" },
+    update: {},
+    create: {
+      name: "Média",
+      created_at: new Date(),
+    },
+  });
+
+  await prisma.taskPriority.upsert({
+    where: { id: "3" },
+    update: {},
+    create: {
+      name: "Baixa",
+      created_at: new Date(),
+    },
+  });
 }
 
 main()

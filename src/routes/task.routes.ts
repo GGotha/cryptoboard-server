@@ -12,5 +12,6 @@ taskRouter.post("/", checkIsNeuro, TaskController.store);
 taskRouter.put("/:taskId", checkIsNeuro, TaskController.update);
 taskRouter.delete("/:taskId", checkIsNeuro, TaskController.delete);
 taskRouter.get("/closed-by-date/:date", checkIsNeuro, TaskController.closedByDate);
+taskRouter.get("/priority-or-final-date", checkIsNeuro, TaskController.priorityOrFinalDate);
 
 export default taskRouter;

@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export class TaskController {
   public static async index(req: Request, res: Response) {
-    const tasks = await prisma.tasks.findMany();
+    const tasks = await prisma.task.findMany({ include: { taskPriority: true } });
 
     try {
       return res.send({
@@ -32,16 +32,28 @@ export class TaskController {
   public static async store(req: Request, res: Response) {
     const { titulo, descricao, dataFinal, nivelPrioridade } = req.body;
 
+    const priorityLevel = await prisma.taskPriority.findFirst({
+      where: { name: nivelPrioridade },
+    });
+
+    if (!priorityLevel) {
+      return res.status(400).send({
+        success: false,
+        message: "This priority level doesn´t exist",
+      });
+    }
+
     const { userId } = req;
 
-    const task = await prisma.tasks.create({
+    const task = await prisma.task.create({
       data: {
         title: titulo,
         description: descricao,
         final_date: dataFinal,
-        priority_level: nivelPrioridade,
+        id_task_priority: priorityLevel.id,
         id_user: userId,
       },
+      include: { taskPriority: true },
     });
 
     try {
@@ -70,7 +82,7 @@ export class TaskController {
 
     const { userId } = req;
 
-    const findTask = await prisma.tasks.findFirst({ where: { id: taskId } });
+    const findTask = await prisma.task.findFirst({ where: { id: taskId } });
 
     if (!findTask) {
       return res.status(400).send({
@@ -79,15 +91,27 @@ export class TaskController {
       });
     }
 
-    const task = await prisma.tasks.update({
+    const priorityLevel = await prisma.taskPriority.findFirst({
+      where: { name: nivelPrioridade },
+    });
+
+    if (!priorityLevel) {
+      return res.status(400).send({
+        success: false,
+        message: "This priority level doesn´t exist",
+      });
+    }
+
+    const task = await prisma.task.update({
       where: { id: taskId },
       data: {
         title: titulo,
         description: descricao,
         final_date: dataFinal,
-        priority_level: nivelPrioridade,
+        id_task_priority: priorityLevel.id,
         id_user: userId,
       },
+      include: { taskPriority: true },
     });
 
     try {
@@ -114,7 +138,7 @@ export class TaskController {
     const { taskId } = req.params;
     const { descricao_fechamento } = req.body;
 
-    const findTask = await prisma.tasks.findFirst({ where: { id: taskId } });
+    const findTask = await prisma.task.findFirst({ where: { id: taskId } });
 
     if (!findTask) {
       return res.status(400).send({
@@ -123,7 +147,7 @@ export class TaskController {
       });
     }
 
-    await prisma.tasks.update({
+    await prisma.task.update({
       where: { id: taskId },
       data: { extra_description: descricao_fechamento, close_at: new Date() },
     });
@@ -151,11 +175,60 @@ export class TaskController {
   public static async closedByDate(req: Request, res: Response) {
     const { date } = req.params;
 
-    const formattedDate: string = format(parseISO(date), "yyyy-MM-dd");
+    const formattedDate = format(parseISO(date), "yyyy-MM-dd");
 
     const formattedDateWithTime = `${formattedDate}T00:00:00.000Z`;
 
-    const tasks = await prisma.tasks.findMany({ where: { close_at: formattedDateWithTime } });
+    const tasks = await prisma.task.findMany({
+      where: { close_at: formattedDateWithTime },
+      include: { taskPriority: true },
+    });
+
+    try {
+      return res.send({
+        success: true,
+        tasks,
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).send({
+          success: false,
+          message: error.message,
+        });
+      }
+
+      return res.status(500).send({
+        success: false,
+        message: "Houve um erro interno",
+      });
+    }
+  }
+
+  public static async priorityOrFinalDate(req: Request, res: Response) {
+    let { nivelPrioridade, dataFinal } = req.query;
+
+    nivelPrioridade = nivelPrioridade?.toString();
+    dataFinal = dataFinal?.toString();
+
+    let formattedDateWithTime;
+
+    if (dataFinal !== undefined) {
+      const formattedDate = format(parseISO(dataFinal), "yyyy-MM-dd");
+      formattedDateWithTime = `${formattedDate}T00:00:00.000Z`;
+    }
+
+    const priorityLevel = await prisma.taskPriority.findFirst({
+      where: { name: nivelPrioridade === undefined ? null : nivelPrioridade },
+    });
+
+    formattedDateWithTime = formattedDateWithTime === undefined ? null : formattedDateWithTime;
+
+    const tasks = await prisma.task.findMany({
+      where: {
+        OR: [{ id_task_priority: priorityLevel?.id }, { close_at: formattedDateWithTime }],
+      },
+      include: { taskPriority: true },
+    });
 
     try {
       return res.send({
