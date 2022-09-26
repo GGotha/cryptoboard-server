@@ -1,11 +1,11 @@
 import { Router } from "express";
 
 import userRouter from "./user.routes";
-import coinRouter from "./coin.routes";
+import taskRouter from "./task.routes";
 
 const routes = Router();
 
 routes.use("/user", userRouter);
-routes.use("/coin", coinRouter);
+routes.use("/task", taskRouter);
 
 export default routes;

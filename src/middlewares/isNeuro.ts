@@ -1,20 +1,19 @@
+import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
+
+const prisma = new PrismaClient();
 
 interface TokenPayload {
   iat: number;
   exp: number;
   sub: {
-    userId: number;
+    userId: any;
   };
 }
 
-export default function auth(req: Request, res: Response, next: NextFunction) {
+export default async function checkIsNeuro(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).send({ success: false, message: "Invalid Token" });
-  }
 
   const [, token] = authHeader.split(" ");
 
@@ -23,7 +22,16 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
 
     const { sub } = decoded as unknown as TokenPayload;
 
-    req.userId = sub.userId;
+    req.userId = sub.userId as any;
+
+    const user = await prisma.user.findFirst({
+      where: { id: req.userId },
+      include: { role: true },
+    });
+
+    if (user.role.name !== "Neuro") {
+      return res.status(401).send({ success: false, message: "Permission Denied" });
+    }
 
     return next();
   } catch (err) {

@@ -15,7 +15,7 @@ async function main() {
     where: { id: "1" },
     update: {},
     create: {
-      name: "Administrator",
+      name: "Neuro",
       active: true,
       created_at: new Date(),
     },
@@ -25,32 +25,32 @@ async function main() {
     where: { id: "2" },
     update: {},
     create: {
-      name: "User",
+      name: "Gestor",
       active: true,
       created_at: new Date(),
     },
   });
 
   await prisma.user.upsert({
-    where: { email: "user@cryptoboard.com.br" },
+    where: { email: "neuro@challenge.com.br" },
     update: {},
     create: {
-      id_role: await (await prisma.role.findFirst({ where: { name: "User" } })).id,
-      email: "user@cryptoboard.com.br",
-      first_name: "User",
-      last_name: "Cryptoboard",
+      id_role: await (await prisma.role.findFirst({ where: { name: "Neuro" } })).id,
+      email: "neuro@challenge.com.br",
+      first_name: "Neuro",
+      last_name: "Challenge",
       password: "$2b$08$7l609TK80Phx8Jg3ReWV7eZDPuHc.36JQvdE3bMC4IoSxBLliY3Zi",
     },
   });
 
   await prisma.user.upsert({
-    where: { email: "admin@cryptoboard.com.br" },
+    where: { email: "gestor@challenge.com.br" },
     update: {},
     create: {
-      id_role: await (await prisma.role.findFirst({ where: { name: "Administrator" } })).id,
-      email: "admin@cryptoboard.com.br",
-      first_name: "Admin",
-      last_name: "Cryptoboard",
+      id_role: await (await prisma.role.findFirst({ where: { name: "Gestor" } })).id,
+      email: "gestor@challenge.com.br",
+      first_name: "Gestor",
+      last_name: "Challenge",
       password: "$2b$08$7l609TK80Phx8Jg3ReWV7eZDPuHc.36JQvdE3bMC4IoSxBLliY3Zi",
     },
   });
