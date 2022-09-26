@@ -1,0 +1,81 @@
+Arguments: 
+  /home/gotha/.nvm/versions/node/v16.17.0/bin/node /home/gotha/.nvm/versions/node/v16.17.0/bin/yarn add date-fns
+
+PATH: 
+  /home/gotha/apache-maven-3.8.4/bin:/home/gotha/.nvm/versions/node/v16.17.0/bin:/home/gotha/apache-maven-3.8.4/bin:/home/gotha/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.17.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/gotha/.cache/yarn/v6/npm-estraverse-4.3.0-398ad3f3c5a24948be7725e83d11a7de28cdbd1d-integrity/node_modules/estraverse/.jshintrc' -> '/home/gotha/projects/nodejs/cryptoboard-server/node_modules/@typescript-eslint/utils/node_modules/estraverse/.jshintrc'
+
+npm manifest: 
+  {
+    "name": "cryptoboard-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "prisma": {
+      "schema": "./src/prisma/schema.prisma"
+    },
+    "scripts": {
+      "clean": "rm -rf ./dist",
+      "build": "tsc",
+      "dev": "ts-node-dev --respawn --exit-child --watch ./src/**/*.schema.graphql --transpile-only src/index.ts --ignore-watch ./node_modules",
+      "start:development": "ts-node src/index.ts --ignore-watch ./node_modules",
+      "start:production": "export NODE_ENV=production && node dist/index.js --ignore-watch ./node_modules",
+      "db:sync": "dotenv -e .env.development -- prisma migrate dev",
+      "db:seed": "ts-node ./src/prisma/seed.ts",
+      "db:truncate": "ts-node ./src/prisma/truncate.ts",
+      "db:studio": "dotenv -e .env.development -- prisma studio",
+      "format": "prettier --write ./src",
+      "lint": "eslint \"**/*.{ts,tsx}\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@types/axios": "^0.14.0",
+      "@types/bcrypt": "^5.0.0",
+      "@types/express": "^4.17.13",
+      "@types/jsonwebtoken": "^8.5.8",
+      "@types/node": "^18.7.8",
+      "@typescript-eslint/eslint-plugin": "^5.33.1",
+      "@typescript-eslint/parser": "^5.33.1",
+      "eslint": "^8.22.0",
+      "eslint-config-airbnb-base": "^15.0.0",
+      "eslint-import-resolver-typescript": "^3.4.2",
+      "eslint-plugin-import": "^2.26.0",
+      "eslint-plugin-prettier": "^4.2.1",
+      "prettier": "^2.7.1",
+      "prisma": "^4.2.1",
+      "ts-node": "^10.9.1",
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^4.7.4"
+    },
+    "dependencies": {
+      "@prisma/client": "^4.2.1",
+      "axios": "^0.27.2",
+      "bcrypt": "^5.0.1",
+      "body-parser": "^1.20.0",
+      "dotenv": "^16.0.1",
+      "express": "^4.18.1",
+      "helmet": "^5.1.1",
+      "jsonwebtoken": "^8.5.1",
+      "path": "^0.12.7",
+      "youch": "^3.2.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
