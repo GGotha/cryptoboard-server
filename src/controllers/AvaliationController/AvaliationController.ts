@@ -32,4 +32,31 @@ export class AvaliationController {
       });
     }
   }
+
+  public static async index(req: Request, res: Response) {
+    const avaliations = await prisma.avaliation.findMany({
+      include: { user: true },
+    });
+
+    avaliations.forEach((avaliation) => delete avaliation.user.password);
+
+    try {
+      return res.send({
+        success: true,
+        avaliations,
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).send({
+          success: false,
+          message: error.message,
+        });
+      }
+
+      return res.status(500).send({
+        success: false,
+        message: "Houve um erro interno",
+      });
+    }
+  }
 }

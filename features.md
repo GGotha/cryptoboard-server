@@ -15,3 +15,13 @@ Receber notificações de mudanças feitas na sua agenda ✅
 Realizar uma avaliação do ambiente e apontar como tem se sentido ✅
 
 ## Gestor
+
+Consultar e alterar a agenda do colaborador ou enviar uma notificação de novo evento
+
+Acessar feedbacks enviados pelo usuário ✅
+
+Receber avisos caso o usuário solicite ajuda ✅
+
+Visualizar a lista de colaboradores sob sua responsabilidade ✅
+
+Adicionar, remover, inativar ou alterar dados de colaboradores ✅

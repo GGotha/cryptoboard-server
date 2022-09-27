@@ -13,6 +13,11 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.user.deleteMany();
   await prisma.role.deleteMany();
+  await prisma.avaliation.deleteMany();
+  await prisma.notification.deleteMany();
+  await prisma.task.deleteMany();
+  await prisma.taskHelp.deleteMany();
+  await prisma.taskPriority.deleteMany();
 }
 
 main()
